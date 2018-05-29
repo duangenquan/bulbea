@@ -150,13 +150,13 @@ class Share(Entity):
     :Example:
 
     >>> import bulbea as bb
-    >>> share = bb.Share(source = 'YAHOO', ticker = 'GOOGL')
+    >>> share = bb.Share(source = 'WIKI', ticker = 'GOOGL')
     >>> share.data.sample(1)
                 Open       High        Low  Close      Volume  Adjusted Close
     Date
     2003-05-15  18.6  18.849999  18.470001  18.73  71248800.0        1.213325
     '''
-    def __init__(self, source, ticker, start = None, end = None, latest = None, cache = False):
+    def __init__(self, source = 'WIKI', ticker = 'GOOGL', start = None, end = None, latest = None, cache = False):
         _check_str(source, raise_err = True)
         _check_str(ticker, raise_err = True)
 
@@ -184,12 +184,13 @@ class Share(Entity):
         >>> share = bb.Share(source = 'YAHOO', ticker = 'AAPL')
         >>> share.update()
         '''
-        self.data    = quandl.get('{database}/{code}'.format(
+        self.datart = None
+        self.datahs    = quandl.get('{database}/{code}'.format(
             database = self.source,
             code     = self.ticker
         ))
-        self.length  =  len(self.data)
-        self.attrs   = list(self.data.columns)
+        self.length  =  len(self.datahs)
+        self.attrs   = list(self.datahs.columns)
 
     def __len__(self):
         '''

@@ -17,33 +17,35 @@ from bulbea._util import (
 from bulbea.entity.share import _get_cummulative_return
 import bulbea as bb
 
-def split(share,
+def split(sharedata,
           attrs     = 'Close',
           window    = 0.01,
           train     = 0.60,
           shift     = 1,
           normalize = False):
     '''
-    :param attrs: `str` or `list` of attribute names of a share, defaults to *Close* attribute
     :type attrs: :obj: `str`, :obj:`list`
     '''
-    _check_type(share, type_ = bb.Share, raise_err = True, expected_type_name = 'bulbea.Share')
     _check_iterable(attrs, raise_err = True)
     _check_int(shift, raise_err = True)
     _check_real(window, raise_err = True)
     _check_real(train, raise_err = True)
 
-    _validate_in_range(window, 0, 1, raise_err = True)
     _validate_in_range(train, 0, 1, raise_err = True)
 
-    data   = share.data[attrs]
+    data   = sharedata[attrs]
 
-    length = len(share)
-
-    window = int(np.rint(length * window))
+    length = len(sharedata)
+    
+    if window >=0 and window <= 1:
+        window = int(np.rint(length * window))
+        
+    print('====Actual window is ' + str(window))
+        
     offset = shift - 1
 
     splits = np.array([data[i if i is 0 else i + offset: i + window] for i in range(length - window)])
+    normsplit = np.array([ [split[0],split[len(split)-1]] for split in splits])
 
     if normalize:
         splits = np.array([_get_cummulative_return(split) for split in splits])
@@ -55,6 +57,7 @@ def split(share,
     test   = splits[split:,:]
 
     Xtrain, Xtest = train[:,:-1], test[:,:-1]
+    XtrainNorm, XtestNorm = normsplit[:split,:],normsplit[split:,:]
     ytrain, ytest = train[:, -1], test[:, -1]
 
-    return (Xtrain, Xtest, ytrain, ytest)
+    return (Xtrain, Xtest, ytrain, ytest, XtrainNorm, XtestNorm)

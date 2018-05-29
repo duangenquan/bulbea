@@ -6,9 +6,16 @@ docs/_build
 
 # Jupyter Checkpoints
 examples/.ipynb_checkpoints
+__pycache__
 
 # twitter
 twitter.sh
 
 # misc
 snippet.py
+
+*.py~
+
+*~
+[r/R]esults
+

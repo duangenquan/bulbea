@@ -4,6 +4,8 @@ from six import with_metaclass
 from keras.models import Sequential
 from keras.layers import recurrent
 from keras.layers import core
+import numpy as np
+from bulbea.entity.share import _get_cummulative_return
 
 from bulbea.learn.models import Supervised
 
@@ -43,3 +45,28 @@ class RNN(ANN):
 
     def predict(self, X):
         return self.model.predict(X)
+        
+    def sequence(self, x, num):
+        h, w = x.shape
+        x = np.reshape(x, (h*w))
+        
+        predicted = []
+        predictedNorm = []
+        
+        for i in range(num):
+            xnew = np.reshape(_get_cummulative_return(x), (1, h, w))
+            
+            datanew = self.model.predict(xnew)            
+            datanewNorm = x[0]*(datanew+1)
+            
+            predicted.append(datanew)
+            predictedNorm.append(datanewNorm)
+            
+            x = x[1:]
+            x = np.append(x, datanewNorm)
+            
+        return np.reshape(np.array(predicted), num), np.reshape(np.array(predictedNorm), num)
+            
+            
+    
+    

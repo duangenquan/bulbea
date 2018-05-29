@@ -25,7 +25,7 @@ class AppConfig(BaseConfig):
     PLOT_STYLE           = 'seaborn'
 
     ENVIRONMENT_VARIABLE = {
-        'quandl_api_key': 'BULBEA_QUANDL_API_KEY',
+        'quandl_api_key': 'YOUR_QUANDL_API_KEY',
         'twitter_api_key': 'BULBEA_TWITTER_API_KEY',
         'twitter_api_secret': 'BULBEA_TWITTER_API_SECRET',
         'twitter_access_token': 'BULBEA_TWITTER_ACCESS_TOKEN',

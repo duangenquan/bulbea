@@ -5,3 +5,5 @@ from __future__ import absolute_import
 from bulbea.entity.base  import Entity
 from bulbea.entity.share import Share
 from bulbea.entity.stock import Stock
+from bulbea.entity.googlefinance import Share2
+
